@@ -1,4 +1,54 @@
 <?php
+// including the database connection file
+include_once("../../config/config.php");
+
+if(isset($_POST['update']))
+{	
+
+	$id = mysqli_real_escape_string($mysqli, $_POST['id']);
+	
+	$name = mysqli_real_escape_string($mysqli, $_POST['name']);
+	$age = mysqli_real_escape_string($mysqli, $_POST['age']);
+	$email = mysqli_real_escape_string($mysqli, $_POST['email']);	
+	
+	// checking empty fields
+	if(empty($name) || empty($age) || empty($email)) {	
+			
+		if(empty($name)) {
+			echo "<font color='red'>Name field is empty.</font><br/>";
+		}
+		
+		if(empty($age)) {
+			echo "<font color='red'>Age field is empty.</font><br/>";
+		}
+		
+		if(empty($email)) {
+			echo "<font color='red'>Email field is empty.</font><br/>";
+		}		
+	} else {	
+		//updating the table
+		$result = mysqli_query($mysqli, "UPDATE users SET name='$name',age='$age',email='$email' WHERE id=$id");
+		
+		//redirectig to the display page. In our case, it is index.php
+		header("Location: listOrder.php");
+	}
+}
+?>
+<?php
+//getting id from url
+$id = $_GET['id'];
+
+//selecting data associated with this particular id
+$result = mysqli_query($mysqli, "SELECT * FROM users WHERE id=$id");
+
+while($res = mysqli_fetch_array($result))
+{
+	$name = $res['name'];
+	$age = $res['age'];
+	$email = $res['email'];
+}
+?>
+<?php
 //including the database connection file
 include_once("../../config/config.php");
 
@@ -199,30 +249,31 @@ $result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC"); // usin
 
         </header><!-- /header -->
         <!-- Header-->
-    <div>
         <div>
-            <a href="add.php">Add New Data</a><br/><br/>
-            <table width='80%' border=0>
-            <tr bgcolor='#CCCCCC'>
-                <td>Name</td>
-                <td>Age</td>
-                <td>Email</td>
-                <td>Update</td>
-            </tr>
-            <?php 
-            //while($res = mysql_fetch_array($result)) { // mysql_fetch_array is deprecated, we need to use mysqli_fetch_array 
-            while($res = mysqli_fetch_array($result)) { 		
-                echo "<tr>";
-                echo "<td>".$res['name']."</td>";
-                echo "<td>".$res['age']."</td>";
-                echo "<td>".$res['email']."</td>";	
-                echo "<td><a href=\"edit.php?id=$res[id]\">Edit</a> | <a href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";		
-            }
-            ?>
-            </table>
+        <a href="index.php">Home</a>
+            <br/><br/>
+            
+            <form name="form1" method="post" action="edit.php">
+                <table border="0">
+                    <tr> 
+                        <td>Name</td>
+                        <td><input type="text" name="name" value="<?php echo $name;?>"></td>
+                    </tr>
+                    <tr> 
+                        <td>Age</td>
+                        <td><input type="text" name="age" value="<?php echo $age;?>"></td>
+                    </tr>
+                    <tr> 
+                        <td>Email</td>
+                        <td><input type="text" name="email" value="<?php echo $email;?>"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="hidden" name="id" value=<?php echo $_GET['id'];?>></td>
+                        <td><input type="submit" name="update" value="Update"></td>
+                    </tr>
+                </table>
+            </form>
         </div>
-    </div><!-- /#right-panel -->
-
     <!-- Right Panel -->
 
     <script src="../../vendors/jquery/dist/jquery.min.js"></script>

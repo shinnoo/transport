@@ -2,9 +2,6 @@
 //including the database connection file
 include_once("../../config/config.php");
 
-//fetching data in descending order (lastest entry first)
-//$result = mysql_query("SELECT * FROM users ORDER BY id DESC"); // mysql_query is deprecated
-$result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC"); // using mysqli_query instead
 ?>
 
 <html>
@@ -25,6 +22,7 @@ $result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC"); // usin
     <link rel="stylesheet" href="../../vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="../../vendors/selectFX/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="../../vendors/jqvmap/dist/jqvmap.min.css">
+
 
 
     <link rel="stylesheet" href="../../assets/css/style.css">
@@ -199,32 +197,32 @@ $result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC"); // usin
 
         </header><!-- /header -->
         <!-- Header-->
-    <div>
-        <div>
-            <a href="add.php">Add New Data</a><br/><br/>
-            <table width='80%' border=0>
-            <tr bgcolor='#CCCCCC'>
-                <td>Name</td>
-                <td>Age</td>
-                <td>Email</td>
-                <td>Update</td>
-            </tr>
-            <?php 
-            //while($res = mysql_fetch_array($result)) { // mysql_fetch_array is deprecated, we need to use mysqli_fetch_array 
-            while($res = mysqli_fetch_array($result)) { 		
-                echo "<tr>";
-                echo "<td>".$res['name']."</td>";
-                echo "<td>".$res['age']."</td>";
-                echo "<td>".$res['email']."</td>";	
-                echo "<td><a href=\"edit.php?id=$res[id]\">Edit</a> | <a href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";		
-            }
-            ?>
-            </table>
-        </div>
-    </div><!-- /#right-panel -->
-
     <!-- Right Panel -->
+<!-- add.html -->
+<a href="listOrder.php">Home</a>
+<br/><br/>
 
+<form action="add.php" method="post" name="form1">
+	<table width="25%" border="0">
+		<tr> 
+			<td>Name</td>
+			<td><input type="text" name="name"></td>
+		</tr>
+		<tr> 
+			<td>Age</td>
+			<td><input type="text" name="age"></td>
+		</tr>
+		<tr> 
+			<td>Email</td>
+			<td><input type="text" name="email"></td>
+		</tr>
+		<tr> 
+			<td></td>
+			<td><input type="submit" name="Submit" value="Add"></td>
+		</tr>
+	</table>
+</form>
+<!-- end add.html -->
     <script src="../../vendors/jquery/dist/jquery.min.js"></script>
     <script src="../../vendors/popper.js/dist/umd/popper.min.js"></script>
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -255,5 +253,43 @@ $result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC"); // usin
             });
         })(jQuery);
     </script>
+    <?php
+    if(isset($_POST['Submit'])) {	
+        $name = mysqli_real_escape_string($mysqli, $_POST['name']);
+        $age = mysqli_real_escape_string($mysqli, $_POST['age']);
+        $email = mysqli_real_escape_string($mysqli, $_POST['email']);
+            
+        // checking empty fields
+        if(empty($name) || empty($age) || empty($email)) {
+                    
+            if(empty($name)) {
+                echo "<font color='red'>Name field is empty.</font><br/>";
+            }
+            
+            if(empty($age)) {
+                echo "<font color='red'>Age field is empty.</font><br/>";
+            }
+            
+            if(empty($email)) {
+                echo "<font color='red'>Email field is empty.</font><br/>";
+            }
+            
+            //link to the previous page
+            echo "<br/><a href='javascript:self.history.back();'>Go Back</a>";
+        } else { 
+            // if all the fields are filled (not empty) 
+                
+            //insert data to database	
+            $result = mysqli_query($mysqli, "INSERT INTO users(name,age,email) VALUES('$name','$age','$email')");
+            
+            //display success message
+            // echo "<font color='green'>Data added successfully.";
+            // echo "<br/><a href='listOrder.php'>View Result</a>";
+            echo '<div class="alert alert-success" role="alert">
+            Thêm thành công
+            </div>';
+        }
+    }
+    ?>
 </body>
 </html>
