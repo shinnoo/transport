@@ -4,9 +4,7 @@ include_once("../../config/config.php");
 
 //fetching data in descending order (lastest entry first)
 //$result = mysql_query("SELECT * FROM users ORDER BY id DESC"); // mysql_query is deprecated
-$orders = mysqli_query($mysqli, "SELECT * FROM donhang ORDER BY id DESC"); // using mysqli_query instead
-$khachhangs = mysqli_query($mysqli, "SELECT * FROM khachhang ORDER BY id DESC");
-$loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
+$result = mysqli_query($mysqli, "SELECT * FROM khachhang ORDER BY id DESC"); // using mysqli_query instead
 ?>
 
 <html>
@@ -62,8 +60,8 @@ $loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Quản lí</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-puzzle-piece"></i><a href="../customer/listCustomer.php">Khách hàng</a></li>
-                            <li><i class="fa fa-id-badge"></i><a href="listOrder.php">Đơn hàng</a></li>
+                            <li><i class="fa fa-puzzle-piece"></i><a href="listCustomer.php">Khách hàng</a></li>
+                            <li><i class="fa fa-id-badge"></i><a href="../order/listOrder.php">Đơn hàng</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -219,107 +217,46 @@ $loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <a class="btn btn-primary mb-2" href="add.php">Thêm mới</a>
+                                <a class="btn btn-primary mb-2" href="add.php">Thêm mới</a>
                                     <table id="bootstrap-data-table"
                                         class="table table-striped table-bordered dataTable no-footer" role="grid"
                                         aria-describedby="bootstrap-data-table_info">
                                         <thead>
                                             <tr role="row">
-                                            <th class="sorting_asc" tabindex="0"
-                                                    aria-controls="bootstrap-data-table" rowspan="1" colspan="1"
-                                                    aria-sort="ascending"
-                                                    aria-label="Name: activate to sort column descending"
-                                                    style="width: 5em;">Mã đơn hàng</th>
                                                 <th class="sorting_asc" tabindex="0"
                                                     aria-controls="bootstrap-data-table" rowspan="1" colspan="1"
                                                     aria-sort="ascending"
                                                     aria-label="Name: activate to sort column descending"
-                                                    style="width: 15em;">Tên khách hàng</th>
+                                                    style="width: 202px;">Tên</th>
                                                 <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Position: activate to sort column ascending"
-                                                    style="width: 15em;">Số điện thoại</th>  
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 30em;">địa chỉ</th>  
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 5em;">Loại hàng</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 15em;">Hình thức vận chuyển</th>
+                                                    style="width: 252px;">Số điện thoại</th>
                                                 <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Office: activate to sort column ascending"
-                                                    style="width: 148px;">Ghi chú</th>
+                                                    style="width: 148px;">Địa chỉ</th>
                                                 <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Salary: activate to sort column ascending"
-                                                    style="width: 117px;">Giá tiền</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Salary: activate to sort column ascending"
-                                                    style="width: 50em;">Thao tác</th>
+                                                    style="width: 202px;">Thao tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-            <?php 
-            
-                $khachList = array();
-                    while($khachs = mysqli_fetch_array($khachhangs)) {
-                        $khachList[] = $khachs;
-                    }
-                $loaiList = array();
-                    while($loais = mysqli_fetch_array($loaihangs)) {
-                        $loaiList[] = $loais;
-                }
-                
-                while($res = mysqli_fetch_array($orders)) { 		
+                                            <?php 
+            //while($res = mysql_fetch_array($result)) { // mysql_fetch_array is deprecated, we need to use mysqli_fetch_array 
+            while($res = mysqli_fetch_array($result)) { 		
                 echo "<tr class='odd'>";
-               
-                echo "<td class='sorting_1'>".$res['id']."</td>";
-                foreach($khachList as $k1){
-                   if($k1['id']==$res['khach_id']){
-                    echo "<td class='sorting_1'>".$k1['name']."</td>";
-                   }
-                }
-
-                foreach($khachList as $k1){
-                    if($k1['id']==$res['khach_id']){
-                     echo "<td class='sorting_1'>".$k1['sdt']."</td>";
-                    }
-                 }
-
-                 foreach($khachList as $k1){
-                    if($k1['id']==$res['khach_id']){
-                     echo "<td class='sorting_1'>".$k1['diachi']."</td>";
-                    }
-                 }
-                
-                foreach($loaiList as $loaiview){
-                    if($loaiview['id']==$res['loaihang_id']){
-                     echo "<td class='sorting_1'>".$loaiview['tenhang']."</td>";
-                    }
-                 }
-                if($res['hinhthuc'] == 0){
-                    echo "<td class='sorting_1'>Tiêu chuẩn</td>";
-                }else{
-                    echo "<td class='sorting_1'>Giao hàng nhanh</td>";
-                }
-                echo "<td class='sorting_1'>".$res['note']."</td>";
-                echo "<td class='sorting_1'>".$res['tien']."</td>";
+                echo "<td class='sorting_1'>".$res['name']."</td>";
+                echo "<td class='sorting_1'>".$res['sdt']."</td>";
+                echo "<td class='sorting_1'>".$res['diachi']."</td>";	
                 echo "<td class='sorting_1 p-2'><a class='btn btn-primary' href=\"view.php?id=$res[id]\">Xem</a> | <a class='btn btn-warning' href=\"edit.php?id=$res[id]\">Sửa</a> | <a class='btn btn-danger' href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Bạn có chắc chắn muốn xóa?')\">Xóa</a></td>";		
             }
-            ?>
-            
-        </tbody>
+            ?></tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                       </div>
                     </div>
                 </div>
             </div>
