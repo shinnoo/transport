@@ -1,12 +1,17 @@
 <?php
-//including the database connection file
+// including the database connection file
 include_once("../../config/config.php");
 
-//fetching data in descending order (lastest entry first)
-//$result = mysql_query("SELECT * FROM users ORDER BY id DESC"); // mysql_query is deprecated
-$orders = mysqli_query($mysqli, "SELECT * FROM donhang ORDER BY id DESC"); // using mysqli_query instead
+?>
+<?php
+//getting id from url
+$id = $_GET['id'];
+
+//selecting data associated with this particular id
+$result = mysqli_query($mysqli, "SELECT * FROM donhang WHERE id=$id");
 $khachhangs = mysqli_query($mysqli, "SELECT * FROM khachhang ORDER BY id DESC");
 $loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
+
 ?>
 
 <html>
@@ -210,131 +215,92 @@ $loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
             </div>
 
         </header><!-- /header -->
+                                    <!-- $khachhang_id = $res['khachhang_id'];
+                                $loaihang_id = $res['loaihang_id'];
+                                $hinhthuc = $res['hinhthuc'];
+                                $note = $res['note'];
+                                $tien = $res['tien']; -->
         <!-- Header-->
         <div>
-            <div>
-                <div class="card">
-                    <div class="card-body" style="min-height: 100vh;">
-                        <div id="bootstrap-data-table_wrapper"
-                            class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="btn btn-primary mb-2" href="add.php">Thêm mới</a>
-                                    <table id="bootstrap-data-table"
-                                        class="table table-striped table-bordered dataTable no-footer" role="grid"
-                                        aria-describedby="bootstrap-data-table_info">
-                                        <thead>
-                                            <tr role="row">
-                                            <th class="sorting_asc" tabindex="0"
-                                                    aria-controls="bootstrap-data-table" rowspan="1" colspan="1"
-                                                    aria-sort="ascending"
-                                                    aria-label="Name: activate to sort column descending"
-                                                    style="width: 5em;">Mã đơn hàng</th>
-                                                <th class="sorting_asc" tabindex="0"
-                                                    aria-controls="bootstrap-data-table" rowspan="1" colspan="1"
-                                                    aria-sort="ascending"
-                                                    aria-label="Name: activate to sort column descending"
-                                                    style="width: 15em;">Tên khách hàng</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 15em;">Số điện thoại</th>  
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 30em;">địa chỉ</th>  
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 5em;">Loại hàng</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 15em;">Hình thức vận chuyển</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Office: activate to sort column ascending"
-                                                    style="width: 148px;">Ghi chú</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Salary: activate to sort column ascending"
-                                                    style="width: 117px;">Giá tiền</th>
-                                                <th class="sorting" tabindex="0" aria-controls="bootstrap-data-table"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Salary: activate to sort column ascending"
-                                                    style="width: 50em;">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-            <?php 
+        <div class="card" style="min-height: 100vh;">
+             <div class="card-body">
+             <form name="form1" method="post" action="edit.php">
+             <?php 
             
-                $khachList = array();
-                    while($khachs = mysqli_fetch_array($khachhangs)) {
-                        $khachList[] = $khachs;
-                    }
-                $loaiList = array();
-                    while($loais = mysqli_fetch_array($loaihangs)) {
-                        $loaiList[] = $loais;
-                }
-                
-                while($res = mysqli_fetch_array($orders)) { 		
-                echo "<tr class='odd'>";
-               
-                echo "<td class='sorting_1'>".$res['id']."</td>";
-                foreach($khachList as $k1){
-                   if($k1['id']==$res['khach_id']){
-                    echo "<td class='sorting_1'>".$k1['name']."</td>";
-                   }
-                }
+            $khachList = array();
+                while($khachs = mysqli_fetch_array($khachhangs)) {
+                    $khachList[] = $khachs;
+                }            
 
-                foreach($khachList as $k1){
-                    if($k1['id']==$res['khach_id']){
-                     echo "<td class='sorting_1'>".$k1['sdt']."</td>";
-                    }
-                 }
-
-                 foreach($khachList as $k1){
-                    if($k1['id']==$res['khach_id']){
-                     echo "<td class='sorting_1'>".$k1['diachi']."</td>";
-                    }
-                 }
-                
-                foreach($loaiList as $loaiview){
-                    if($loaiview['id']==$res['loaihang_id']){
-                     echo "<td class='sorting_1'>".$loaiview['tenhang']."</td>";
-                    }
-                 }
-                if($res['hinhthuc'] == 0){
-                    echo "<td class='sorting_1'>Tiêu chuẩn</td>";
-                }else{
-                    echo "<td class='sorting_1'>Giao hàng nhanh</td>";
-                }
-                echo "<td class='sorting_1'>".$res['note']."</td>";
-                echo "<td class='sorting_1'>".$res['tien']."</td>";
-                echo "<td class='sorting_1 p-2'><a class='btn btn-primary' href=\"view.php?id=$res[id]\">Xem</a> | <a class='btn btn-warning' href=\"edit.php?id=$res[id]\">Sửa</a> | <a class='btn btn-danger' href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Bạn có chắc chắn muốn xóa?')\">Xóa</a></td>";		
+            $loaiList = array();
+                while($loais = mysqli_fetch_array($loaihangs)) {
+                    $loaiList[] = $loais;
             }
-            ?>
-            
-        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+            while($res = mysqli_fetch_array($result)) { 		
+            foreach($khachList as $k1){
+               if($k1['id']==$res['khach_id']){
+                   $name = $k1['name'];
+                   $sdt = $k1['sdt'];
+                   $diachi = $k1['diachi'];
+               }
+            }
+            foreach($loaiList as $loaiview){
+                if($loaiview['id']==$res['loaihang_id']){
+                    $tenhang = $loaiview['tenhang'];
+                }
+            }
+
+            $hinhthuc = $res['hinhthuc'];
+            $note = $res['note'];
+            $tien = $res['tien'];
+        }
+
+        ?>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" placeholder="Nhập họ tên" name="name"
+                            value="<?php echo $name;?>" style="width: 30rem;">
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" class="form-control" name="sdt" value="<?php echo $sdt;?>"style="width: 30rem;">
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" class="form-control" name="diachi" value="<?php echo $diachi;?>"style="width: 30rem;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Loại hàng hóa</label>
+                        <input type="text" class="form-control" name="tenhang" value="<?php echo $tenhang;?>"style="width: 30rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Hình thức vận chuyển</label>
+                        <input type="text" class="form-control" name="hinhthuc" value="<?php if($hinhthuc == 1){echo 'Giao hàng nhanh';} else echo 'Giao hàng tiêu chuẩn'?>"style="width: 30rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Ghi chú</label>
+                        <input class="form-control" type="text" name="note" value="<?php echo $note;?> "style="width: 30rem;">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Tiền thu hộ</label>
+                        <input class="form-control" type="text" name="tien" value="<?php echo $tien;?> "style="width: 30rem;">
+                    </div>
+                    <a class="btn btn-secondary" href="listOrder.php">Quay lại</a>
+                </form>
+             </div>
+
             </div>
-        </div><!-- /#right-panel -->
+        </div>
 
 
+        <!-- Right Panel -->
 
         <script src="../../vendors/jquery/dist/jquery.min.js"></script>
         <script src="../../vendors/popper.js/dist/umd/popper.min.js"></script>
         <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="../../assets/js/main.js"></script>
-        <link src="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
-        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
         <script src="../../vendors/chart.js/dist/Chart.bundle.min.js"></script>
         <script src="../../assets/js/dashboard.js"></script>
@@ -342,14 +308,6 @@ $loaihangs = mysqli_query($mysqli, "SELECT * FROM loaihang ORDER BY id DESC");
         <script src="../../vendors/jqvmap/dist/jquery.vmap.min.js"></script>
         <script src="../../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
         <script src="../../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-        <!-- Right Panel -->
-        <script>
-            $(document).ready(function () {
-                $('#example').DataTable();
-            });
-
-        </script>
-
         <script>
             (function ($) {
                 "use strict";
