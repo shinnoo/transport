@@ -32,45 +32,72 @@
 </head>
 
 <body class="bg-dark">
-
-
-    <div class="sufee-login d-flex align-content-center flex-wrap">
+<?php
+      if(isset($_POST["login"])){
+        if(empty($_POST["userid"]) || empty($_POST["password"]))
+        {
+          $message = "<div class='alert alert-danger'>Không được để trống</div>";
+        }
+        else
+        {
+          $userId = $_POST["userid"];
+          $connect = new PDO("mysql:host=localhost;dbname=bai3tiep", "root", "");
+          $query = "SELECT * FROM user WHERE username = '$userId'";
+          $statement = $connect->prepare($query);
+          $statement->execute();
+          if($statement->rowCount()>0){
+            $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            if($result[0]['password']==$_POST["password"]){   
+                header("Location: dashboard/index.html");
+              
+            }
+            else{
+              $message = "<div class='alert alert-danger'>Sai tài khoản hoặc mật khẩu</div>";
+            }
+          }	
+          else{
+            $message = "<div class='alert alert-danger'>Sai tài khoản hoặc mật khẩu</div>";
+          }		
+        }
+        echo $message; 
+      }
+    
+    ?>
+          <div class="sufee-login d-flex align-content-center flex-wrap">
         <div class="container">
             <div class="login-content">
                 <div class="login-logo">
-                    <a href="index.html">
+                    <a href="#">
                         <img class="align-content" src="images/logo.png" alt="">
                     </a>
                 </div>
                 <div class="login-form">
-                    <form>
+                    <form method="post">
                         <div class="form-group">
-                            <label>Email address</label>
-                            <input type="email" class="form-control" placeholder="Email">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" name="userid" id="userid" class="form-control" placeholder="">
                         </div>
                             <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password">
+                                <label>Mật khẩu</label>
+                                <input type="password" name="password" id="password"  class="form-control" placeholder="">
                         </div>
                                 <div class="checkbox">
                                     <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-                                    <label class="pull-right">
-                                <a href="#">Forgotten Password?</a>
-                            </label>
+                                <input type="checkbox"> Lưu mật khẩu
+                            
 
                                 </div>
-                                <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
+                                
+                                    <input type="submit" name="login" value="Đăng nhập" class="btn btn-success btn-flat m-b-30 m-t-30">
+                                    
+                                    </input>
                                 <div class="social-login-content">
                                     <div class="social-button">
-                                        <button type="button" class="btn social facebook btn-flat btn-addon mb-3"><i class="ti-facebook"></i>Sign in with facebook</button>
-                                        <button type="button" class="btn social twitter btn-flat btn-addon mt-2"><i class="ti-twitter"></i>Sign in with twitter</button>
+                                        <button type="button" class="btn social facebook btn-flat btn-addon mb-3"><i class="ti-facebook"></i>Đăng nhập với facebook</button>
+                                        <button type="button" class="btn social twitter btn-flat btn-addon mt-2"><i class="ti-twitter"></i>Đăng nhập với twitter</button>
                                     </div>
                                 </div>
-                                <div class="register-link m-t-15 text-center">
-                                    <p>Don't have account ? <a href="#"> Sign Up Here</a></p>
-                                </div>
+                            
                     </form>
                 </div>
             </div>
