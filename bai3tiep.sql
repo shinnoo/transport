@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th7 08, 2020 lúc 08:45 PM
+-- Thời gian đã tạo: Th7 10, 2020 lúc 06:43 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.5
 
@@ -47,8 +47,7 @@ INSERT INTO `donhang` (`id`, `loaihang_id`, `khach_id`, `note`, `tien`, `hinhthu
 (7, 1, 15, 'vans style 36 decon sf 270', 1234, 0),
 (11, 1, 33, 'vans style 36 decon sf 270', 500, 1),
 (12, 1, 33, 'sáº¥dasdasdasdasd', 11212, 1),
-(13, 1, 30, 'cao cao', 1600, 1),
-(14, 9, 34, 'giao nhanh nheeeeee', 580, 0);
+(13, 1, 34, 'cao cao', 1600, 1);
 
 -- --------------------------------------------------------
 
@@ -78,7 +77,8 @@ INSERT INTO `khachhang` (`id`, `name`, `sdt`, `diachi`) VALUES
 (31, 'dung dz', '123', 'dh'),
 (32, 'cao van tiep dung dtrai', '03378555', 'Æ°eewwewe'),
 (33, 'dung1', '123', 'jhggjjgjh'),
-(34, 'tran ngoc dung', '0889', 'doan hung');
+(34, 'tran ngoc dung', '0889', 'doan hung'),
+(35, 'cuong', '123', 'ha noi');
 
 -- --------------------------------------------------------
 
@@ -111,6 +111,13 @@ CREATE TABLE `user` (
   `password` varchar(50) NOT NULL,
   `role` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Đang đổ dữ liệu cho bảng `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
+(2, 'caovantiep', '1998', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -148,13 +155,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT cho bảng `loaihang`
@@ -166,7 +173,7 @@ ALTER TABLE `loaihang`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
